@@ -3,6 +3,12 @@ name = "redis-keyspace-stats"
 version = "0.1.0"
 authors = ["Scott Hardy <scott.the.hardy@gmail.com>"]
 edition = "2018"
+license = "MIT"
+description = "Analyzes your Redis keyspace and returns statistics about it"
+readme = "README.md"
+repository = "https://github.com/scott113341/redis-keyspace-stats"
+keywords = ["redis"]
+categories = ["command-line-utilities", "database", "development-tools::profiling"]
 
 [dependencies]
 clap = "3.0.0-beta.2"
