@@ -1,4 +1,4 @@
-# redis-keyspace-stats
+# [redis-keyspace-stats](https://crates.io/crates/redis-keyspace-stats)
 
 This program analyzes your Redis keyspace and returns statistics about it. It's somewhat flexible. Usually, you'll
 provide [glob-style](https://docs.rs/glob/0.3.0/glob/struct.Pattern.html) patterns to group keys into bins.
