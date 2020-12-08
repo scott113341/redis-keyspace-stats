@@ -8,7 +8,8 @@ use redis::{Client, Connection};
 
 fn main() {
     // Parse CLI args into a Config struct
-    let config = parse_args::Config::parse();
+    let mut config = parse_args::Config::parse();
+    config.normalize();
 
     // Connect to Redis
     let client = Client::open(config.url.clone()).unwrap();

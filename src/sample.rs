@@ -1,6 +1,6 @@
 use redis::Connection;
 
-use crate::parse_args::Config;
+use crate::parse_args::{Config, Stats};
 
 #[derive(Debug)]
 pub struct Sample {
@@ -21,7 +21,7 @@ pub fn sample_key(key: &String, config: &Config, conn: &mut Connection) -> Optio
 
         // Get the memory usage of the key, sampling ALL values if this is a nested data type
         // https://redis.io/commands/memory-usage
-        if config.stat_memory {
+        if config.has_stat(Stats::Memory) {
             pipe_ref = pipe_ref
                 .cmd("MEMORY")
                 .arg("USAGE")
@@ -32,7 +32,7 @@ pub fn sample_key(key: &String, config: &Config, conn: &mut Connection) -> Optio
 
         // Get the TTL of the key in seconds
         // https://redis.io/commands/ttl
-        if config.stat_ttl {
+        if config.has_stat(Stats::TTL) {
             pipe_ref = pipe_ref.cmd("TTL").arg(key.clone());
         }
     }
@@ -50,7 +50,7 @@ pub fn sample_key(key: &String, config: &Config, conn: &mut Connection) -> Optio
     // "data" Vec is variable in length depending on which stats we're collecting. Also, right now
     // we can conveniently collect our data into a Vec<Option<isize>>, but that might not always be
     // the case if we add more stats in the future.
-    let sample = match (config.stat_memory, config.stat_ttl) {
+    let sample = match (config.has_stat(Stats::Memory), config.has_stat(Stats::TTL)) {
         (true, true) => Sample {
             memory: data[1],
             ttl: data[2],

@@ -45,15 +45,13 @@ $ redis-keyspace-stats -h
 redis-keyspace-stats 0.1.0
 
 USAGE:
-    redis-keyspace-stats [FLAGS] [OPTIONS] [patterns]...
+    redis-keyspace-stats [OPTIONS] [--] [patterns]...
 
 ARGS:
-    <patterns>...    Glob-style patterns to group statistics by keys
+    <patterns>...    Glob-style patterns to group keys together
 
 FLAGS:
     -h, --help       Prints help information
-        --mem        Collect memory statistics
-        --ttl        Collect TTL statistics
     -V, --version    Prints version information
 
 OPTIONS:
@@ -61,13 +59,14 @@ OPTIONS:
         --batch-sleep-ms <batch-sleep-ms>    [default: 100]
     -n, --samples <n-samples>                [default: 100]
     -o, --out <output-mode>                  [default: table] [possible values: table]
+        --stats <stats>...                   [default: memory,ttl] [possible values: memory, ttl]
         --url <url>                          [default: redis://127.0.0.1]
 ```
 
 Let's get some quick memory + TTL stats, sampling 50 keys:
 
 ```
-$ redis-keyspace-stats --url $REDIS_URL --mem --ttl -n 50
+$ redis-keyspace-stats --url $REDIS_URL -n 50
 +---------+-----------+---------------------+--------------+--------------------+--------------+-----------------+
 | Pattern | Key count | Example keys        | Memory (sum) | Memory (p50/90/99) | TTL (% with) | TTL (p50/90/99) |
 +---------+-----------+---------------------+--------------+--------------------+--------------+-----------------+
@@ -83,7 +82,7 @@ Using what's showing in the "Example keys" column, let's write a few
 [glob-style](https://docs.rs/glob/0.3.0/glob/struct.Pattern.html) patterns to bin keys together:
 
 ```
-$ redis-keyspace-stats --url $REDIS_URL --mem --ttl -n 50 'user:*#messages' 'user:?#*' 'company:*'
+$ redis-keyspace-stats --url $REDIS_URL -n 50 'user:*#messages' 'user:?#*' 'company:*'
 +-----------------+-----------+---------------------+--------------+--------------------+--------------+-----------------+
 | Pattern         | Key count | Example keys        | Memory (sum) | Memory (p50/90/99) | TTL (% with) | TTL (p50/90/99) |
 +-----------------+-----------+---------------------+--------------+--------------------+--------------+-----------------+

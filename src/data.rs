@@ -21,14 +21,12 @@ pub struct Data {
 
 impl Data {
     pub fn new(config: &Config) -> Data {
-        // Append a "*" pattern that matches any key for an "other" bin that matches anything
-        let mut patterns = config.patterns.clone();
-        patterns.push(glob::Pattern::new("*").unwrap());
-
+        let samples = HashMap::with_capacity(config.n_samples);
+        let patterns = config.patterns.clone();
         let bins = patterns.iter().map(|p| (p.clone(), vec![])).collect();
 
         Data {
-            samples: HashMap::with_capacity(config.n_samples),
+            samples,
             patterns,
             bins,
         }
