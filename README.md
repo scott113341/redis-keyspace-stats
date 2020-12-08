@@ -6,25 +6,25 @@ provide [glob-style](https://docs.rs/glob/0.3.0/glob/struct.Pattern.html) patter
 This tool is under development, and some obviously useful features are not yet implemented.
 
 Sampling modes:
-- ✅ [Random](https://redis.io/commands/randomkey) sampling
-- 🚧 [Scan](https://redis.io/commands/scan) all keys
-- 🚧 [Scan](https://redis.io/commands/scan) all keys matching a pattern
+- ✅&nbsp;&nbsp;[Random](https://redis.io/commands/randomkey) sampling
+- 🚧&nbsp;&nbsp;[Scan](https://redis.io/commands/scan) all keys
+- 🚧&nbsp;&nbsp;[Scan](https://redis.io/commands/scan) all keys matching a pattern
 
 Statistics:
-- ✅ [Memory](https://redis.io/commands/memory-usage): total, 50/90/99th percentiles
-- ✅ [TTL](https://redis.io/commands/ttl): percent with a TTL, 50/90/99th percentiles
-- 🚧 [Data type](https://redis.io/commands/type) breakdown
+- ✅&nbsp;&nbsp;[Memory](https://redis.io/commands/memory-usage): total, 50/90/99th percentiles
+- ✅&nbsp;&nbsp;[TTL](https://redis.io/commands/ttl): percent with a TTL, 50/90/99th percentiles
+- 🚧&nbsp;&nbsp;[Data type](https://redis.io/commands/type) breakdown
 
 Output formats:
-- ✅ Summary pretty-printed table to STDOUT
-- 🚧 Summary CSV/TSV
-- 🚧 Summary HTML
-- 🚧 Raw data CSV/TSV
+- ✅&nbsp;&nbsp;Summary pretty-printed table to STDOUT
+- 🚧&nbsp;&nbsp;Summary CSV/TSV
+- 🚧&nbsp;&nbsp;Summary HTML
+- 🚧&nbsp;&nbsp;Raw data CSV/TSV
 
 Redis support:
-- ✅ Over [TLS](https://redis.io/topics/encryption) (`rediss://` connection strings)
-- 🚧 [Clusters](https://redis.io/topics/cluster-tutorial)
-- 🚧 [Logical databases](https://redis.io/commands/select)
+- ✅&nbsp;&nbsp;Over [TLS](https://redis.io/topics/encryption) (`rediss://` connection strings)
+- 🚧&nbsp;&nbsp;[Clusters](https://redis.io/topics/cluster-tutorial)
+- 🚧&nbsp;&nbsp;[Logical databases](https://redis.io/commands/select)
 
 ## ⚠️ Warnings
 
