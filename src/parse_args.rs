@@ -1,3 +1,4 @@
+use clap::crate_version;
 use clap::Clap;
 use glob;
 use std::collections::HashSet;
@@ -9,7 +10,7 @@ static STATS_OPTIONS: [&str; 2] = ["memory", "ttl"];
 static OUTPUT_MODE_OPTIONS: [&str; 1] = ["table"];
 
 #[derive(Clap, Eq, PartialEq, Debug)]
-#[clap(version = "0.1.0")]
+#[clap(version = crate_version!())]
 pub struct Config {
     #[clap(short = 'n', long = "samples", default_value = "100")]
     pub n_samples: usize,
