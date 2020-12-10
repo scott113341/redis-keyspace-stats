@@ -37,6 +37,13 @@ Redis support:
   in Redis keys, it's worth noting. Values are never fetched or included in any output.
 - The flags/options/organization/etc of the CLI **will** change as more sampling modes and other features are added
 
+## Installation
+
+For now, there are no published binaries of this tool.
+
+1. Make sure you have Rust installed, or get it via [rustup](https://rustup.rs)
+2. Run `cargo install redis-keyspace-stats` to download + compile the binary
+
 ## Usage examples
 
 Invoking the CLI with `-h` or `--help` will print documentation:
