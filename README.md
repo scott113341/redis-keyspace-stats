@@ -7,6 +7,7 @@ This tool is under development, and some obviously useful features are not yet i
 
 Sampling modes:
 - ✅&nbsp;&nbsp;[Random](https://redis.io/commands/randomkey) sampling
+- 🚧&nbsp;&nbsp;[Random](https://redis.io/commands/randomkey) sampling of keys matching a pattern
 - 🚧&nbsp;&nbsp;[Scan](https://redis.io/commands/scan) all keys
 - 🚧&nbsp;&nbsp;[Scan](https://redis.io/commands/scan) all keys matching a pattern
 
