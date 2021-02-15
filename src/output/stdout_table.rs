@@ -15,6 +15,7 @@ pub fn stdout_table(config: &Config, data: &Data) {
     /***************/
 
     let mut table = Table::new();
+    table.set_format(*prettytable::format::consts::FORMAT_BOX_CHARS);
 
     table.add_row(Row::new(vec![
         Cell::new("Pattern"),
