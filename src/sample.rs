@@ -1,6 +1,7 @@
 use redis::Connection;
 
-use crate::parse_args::{Config, Stats};
+use crate::parse_args::Config;
+use crate::stats::Stats;
 
 #[derive(Debug)]
 pub struct Sample {
@@ -21,7 +22,7 @@ pub fn sample_key(key: &String, config: &Config, conn: &mut Connection) -> Optio
 
         // Get the memory usage of the key, sampling ALL values if this is a nested data type
         // https://redis.io/commands/memory-usage
-        if config.has_stat(Stats::Memory) {
+        if config.has_stat(&Stats::Memory) {
             pipe_ref = pipe_ref
                 .cmd("MEMORY")
                 .arg("USAGE")
@@ -32,7 +33,7 @@ pub fn sample_key(key: &String, config: &Config, conn: &mut Connection) -> Optio
 
         // Get the TTL of the key in seconds
         // https://redis.io/commands/ttl
-        if config.has_stat(Stats::TTL) {
+        if config.has_stat(&Stats::TTL) {
             pipe_ref = pipe_ref.cmd("TTL").arg(key.clone());
         }
     }

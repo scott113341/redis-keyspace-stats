@@ -2,6 +2,7 @@ mod data;
 mod output;
 mod parse_args;
 mod sample;
+mod stats;
 
 use clap::Clap;
 
