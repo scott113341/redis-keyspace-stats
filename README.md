@@ -50,7 +50,7 @@ Invoking the CLI with `-h` or `--help` will print documentation:
 
 ```
 $ redis-keyspace-stats -h
-redis-keyspace-stats 0.2.0
+redis-keyspace-stats 0.3.0
 
 USAGE:
     redis-keyspace-stats [OPTIONS] [--] [patterns]...
