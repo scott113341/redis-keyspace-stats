@@ -1,5 +1,6 @@
-use super::*;
+use crate::data::other::example_keys;
 use crate::data::Data;
+use crate::data::{memory, ttl, types};
 use crate::parse_args::Config;
 use crate::stats::Stats;
 
@@ -31,6 +32,11 @@ pub fn stdout_table(config: &Config, data: &Data) {
         let row = table.get_mut_row(0).unwrap();
         row.add_cell(Cell::new("TTL (% with)"));
         row.add_cell(Cell::new("TTL (p50/90/99)"));
+    }
+
+    if config.has_stat(&Stats::Type) {
+        let row = table.get_mut_row(0).unwrap();
+        row.add_cell(Cell::new("Types"));
     }
 
     /************/
@@ -71,6 +77,14 @@ pub fn stdout_table(config: &Config, data: &Data) {
                 ]
                 .join("\n"),
             ));
+        }
+
+        if config.has_stat(&Stats::Type) {
+            let mut type_lines = Vec::new();
+            for (type_, pct) in types::type_pcts(data, bin) {
+                type_lines.push(format!("{:.2}% {}", pct, type_));
+            }
+            row.add_cell(Cell::new(&type_lines.join("\n")));
         }
 
         table.add_row(row);
