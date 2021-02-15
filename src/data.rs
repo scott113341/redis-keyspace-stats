@@ -10,6 +10,7 @@ pub mod math;
 pub mod memory;
 pub mod other;
 pub mod ttl;
+pub mod types;
 
 pub type Key = String;
 pub type Samples = HashMap<Key, Sample>;

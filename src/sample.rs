@@ -6,9 +6,10 @@ use crate::stats::Stats;
 
 #[derive(Eq, PartialEq, Debug)]
 pub struct Sample {
-    exists: SampleValue<bool>,
-    memory: SampleValue<i64>,
-    ttl: SampleValue<i64>,
+    pub exists: SampleValue<bool>,
+    pub memory: SampleValue<i64>,
+    pub ttl: SampleValue<i64>,
+    pub type_: SampleValue<String>,
 }
 
 #[allow(dead_code)]
@@ -20,6 +21,7 @@ impl Sample {
             exists: Unsampled,
             memory: Unsampled,
             ttl: Unsampled,
+            type_: Unsampled,
         };
 
         // Whether this key exists is always at the 0th index
@@ -44,12 +46,21 @@ impl Sample {
             }
         }
 
-        #[allow(unused_assignments)]
         if config.has_stat(&Stats::TTL) {
             let ttl = data.get(data_idx);
             data_idx += 1;
             sample.ttl = match ttl {
                 Some(Value::Int(ttl)) => Sampled(*ttl),
+                _ => NotFound,
+            }
+        }
+
+        #[allow(unused_assignments)]
+        if config.has_stat(&Stats::Type) {
+            let type_ = data.get(data_idx);
+            data_idx += 1;
+            sample.type_ = match type_ {
+                Some(Value::Status(t)) => Sampled(t.clone()),
                 _ => NotFound,
             }
         }
@@ -67,6 +78,10 @@ impl Sample {
 
     pub fn ttl(&self) -> i64 {
         self.ttl.value().clone()
+    }
+
+    pub fn type_(&self) -> String {
+        self.type_.value().clone()
     }
 }
 
@@ -100,7 +115,7 @@ pub fn sample_key(key: &String, config: &Config, conn: &mut Connection) -> Resul
     {
         // Always check whether this key exists (in case it's since expired)
         // https://redis.io/commands/exists
-        pipe_ref = pipe_ref.cmd("EXISTS").arg(key.clone());
+        pipe_ref = pipe_ref.cmd("EXISTS").arg(key);
 
         // Get the memory usage of the key, sampling ALL values if this is a nested data type
         // https://redis.io/commands/memory-usage
@@ -108,7 +123,7 @@ pub fn sample_key(key: &String, config: &Config, conn: &mut Connection) -> Resul
             pipe_ref = pipe_ref
                 .cmd("MEMORY")
                 .arg("USAGE")
-                .arg(key.clone())
+                .arg(key)
                 .arg("SAMPLES")
                 .arg("0");
         }
@@ -116,7 +131,13 @@ pub fn sample_key(key: &String, config: &Config, conn: &mut Connection) -> Resul
         // Get the TTL of the key in seconds
         // https://redis.io/commands/ttl
         if config.has_stat(&Stats::TTL) {
-            pipe_ref = pipe_ref.cmd("TTL").arg(key.clone());
+            pipe_ref = pipe_ref.cmd("TTL").arg(key);
+        }
+
+        // Get the data type of the key
+        // https://redis.io/commands/type
+        if config.has_stat(&Stats::Type) {
+            pipe_ref = pipe_ref.cmd("TYPE").arg(key);
         }
     }
 
@@ -151,6 +172,7 @@ mod tests {
         assert_eq!(sample.exists(), true);
         assert!(sample.memory() > 16);
         assert_eq!(sample.ttl(), 10);
+        assert_eq!(sample.type_(), "string".to_string());
     }
 
     #[test]
@@ -164,5 +186,6 @@ mod tests {
         assert_eq!(sample.exists(), true);
         assert!(sample.memory() > 128);
         assert_eq!(sample.ttl(), -1);
+        assert_eq!(sample.type_(), "set".to_string());
     }
 }

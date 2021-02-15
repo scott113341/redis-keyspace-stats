@@ -14,7 +14,7 @@ Sampling modes:
 Statistics:
 - ✅&nbsp;&nbsp;[Memory](https://redis.io/commands/memory-usage): total, 50/90/99th percentiles
 - ✅&nbsp;&nbsp;[TTL](https://redis.io/commands/ttl): percent with a TTL, 50/90/99th percentiles
-- 🚧&nbsp;&nbsp;[Data type](https://redis.io/commands/type) breakdown
+- ✅&nbsp;&nbsp;[Data type](https://redis.io/commands/type) breakdown
 
 Output formats:
 - ✅&nbsp;&nbsp;Summary pretty-printed table to STDOUT
@@ -50,7 +50,7 @@ Invoking the CLI with `-h` or `--help` will print documentation:
 
 ```
 $ redis-keyspace-stats -h
-redis-keyspace-stats 0.1.0
+redis-keyspace-stats 0.2.0
 
 USAGE:
     redis-keyspace-stats [OPTIONS] [--] [patterns]...
@@ -67,7 +67,9 @@ OPTIONS:
         --batch-sleep-ms <batch-sleep-ms>    [default: 100]
     -n, --samples <n-samples>                [default: 100]
     -o, --out <output-mode>                  [default: table] [possible values: table]
-        --stats <stats>...                   [default: memory,ttl] [possible values: memory, ttl]
+        --stats <stats>...
+            [default: memory,ttl] [possible values: memory, ttl, type]
+
         --url <url>                          [default: redis://127.0.0.1]
 ```
 
