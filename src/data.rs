@@ -1,10 +1,15 @@
-pub mod get_data;
+use std::collections::HashMap;
 
 use glob;
-use std::collections::HashMap;
 
 use crate::parse_args::Config;
 use crate::sample::Sample;
+
+pub mod get_data;
+pub mod math;
+pub mod memory;
+pub mod other;
+pub mod ttl;
 
 pub type Key = String;
 pub type Samples = HashMap<Key, Sample>;

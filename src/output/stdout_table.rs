@@ -1,5 +1,6 @@
-use super::*;
+use crate::data::other::example_keys;
 use crate::data::Data;
+use crate::data::{memory, ttl};
 use crate::parse_args::Config;
 use crate::stats::Stats;
 
