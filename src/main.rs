@@ -57,3 +57,24 @@ fn seed_fake_data(count: usize, conn: &mut redis::Connection) -> Result<(), redi
     pipe_ref.query(conn)?;
     Ok(())
 }
+
+#[cfg(test)]
+mod tests {
+    // This doesn't test anything, it's just a helper function that returns a basic config and
+    // Redis connection for use in other tests.
+    pub fn test_config_and_conn() -> (crate::parse_args::Config, redis::Connection) {
+        let config = crate::parse_args::Config {
+            n_samples: 1,
+            batch_size: 1,
+            batch_sleep_ms: 0,
+            stats: crate::stats::Stats::all(),
+            output_mode: crate::output::OutputMode::StdoutTable,
+            url: "redis://127.0.0.1".to_string(),
+            patterns: vec![],
+        };
+
+        let conn = crate::redis_connection(config.url.clone()).unwrap();
+
+        (config, conn)
+    }
+}

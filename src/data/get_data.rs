@@ -42,7 +42,7 @@ pub fn get_data(config: &Config, mut conn: &mut Connection) -> Data {
         for key in keys {
             if !data.has_sample(&key) {
                 let sample = sample_key(&key, config, &mut conn);
-                if let Some(sample) = sample {
+                if let Ok(sample) = sample {
                     data.add_sample(key, sample);
                     no_new_keys = false;
                     no_new_keys_streak = 0;

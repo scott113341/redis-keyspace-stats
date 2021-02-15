@@ -36,7 +36,7 @@ pub fn output(config: &Config, data: &Data) {
 mod memory {
     use super::*;
 
-    pub fn total(data: &Data, keys: &Keys) -> isize {
+    pub fn total(data: &Data, keys: &Keys) -> i64 {
         memory_values(data, keys).iter().sum()
     }
 
@@ -55,9 +55,9 @@ mod memory {
         }
     }
 
-    fn memory_values(data: &Data, keys: &Keys) -> Vec<isize> {
+    fn memory_values(data: &Data, keys: &Keys) -> Vec<i64> {
         keys.iter()
-            .map(|k| data.get_sample(k).unwrap().memory.unwrap())
+            .map(|k| data.get_sample(k).unwrap().memory())
             .collect()
     }
 }
@@ -92,9 +92,9 @@ mod ttl {
         }
     }
 
-    fn ttl_values(data: &Data, keys: &Keys) -> Vec<isize> {
+    fn ttl_values(data: &Data, keys: &Keys) -> Vec<i64> {
         keys.iter()
-            .map(|k| data.get_sample(k).unwrap().ttl.unwrap())
+            .map(|k| data.get_sample(k).unwrap().ttl())
             .collect()
     }
 }
