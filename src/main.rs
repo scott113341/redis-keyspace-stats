@@ -4,7 +4,6 @@ mod parse_args;
 mod sample;
 
 use clap::Clap;
-use redis::{Client, Connection};
 
 fn main() {
     // Parse CLI args into a Config struct
@@ -12,8 +11,7 @@ fn main() {
     config.normalize();
 
     // Connect to Redis
-    let client = Client::open(config.url.clone()).unwrap();
-    let mut conn = client.get_connection().unwrap();
+    let mut conn = redis_connection(config.url.clone()).unwrap();
 
     // (Optionally) seed fake data
     // seed_fake_data(128, &mut conn).unwrap();
@@ -25,8 +23,13 @@ fn main() {
     output::output(&config, &data);
 }
 
+fn redis_connection(url: String) -> redis::RedisResult<redis::Connection> {
+    let client = redis::Client::open(url)?;
+    client.get_connection()
+}
+
 #[allow(dead_code)]
-fn seed_fake_data(count: usize, conn: &mut Connection) -> Result<(), redis::RedisError> {
+fn seed_fake_data(count: usize, conn: &mut redis::Connection) -> Result<(), redis::RedisError> {
     use rand::random;
 
     let fake_resources = vec!["user", "company"];
