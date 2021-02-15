@@ -12,18 +12,12 @@ use crate::sample::sample_key;
 //
 //     keys = PIPELINE(["RANDOMKEY", "RANDOMKEY", ..., "RANDOMKEY"])
 //     for key in keys {
-//         stats = PIPELINE(["EXISTS $key", "MEMORY USAGE $key", "TTL $key"])
+//         stats = PIPELINE(["EXISTS $key", "MEMORY USAGE $key", "TTL $key", ...])
 //     }
 //
-// That's fine, but we could get more aggressive by doing something like:
-//
-//     keys = pipeline("RANDOMKEY", "RANDOMKEY", ..., "RANDOMKEY")
-//     stats = pipeline(
-//         keys.map(|key| ["EXISTS $key", "MEMORY USAGE $key", "TTL $key"]).flatten())
-//     )
-//
-// Or, maybe we could even use Lua to even get everything (RANDOMKEY + stats) in one pipeline, and
-// skip having to check for EXISTS?
+// That's fine, but we could get more aggressive by doing something like pipelining the stats for
+// multiple keys at the same, time, or even using Lua to get random keys AND their stats in one
+// operation.
 //
 // For now, we'll keep this kind of slow implementation that uses N+1 pipelines for N keys. At least
 // we won't risk blocking Redis with a massive pipelined command.
@@ -94,11 +88,12 @@ fn this_batch_size(config: &Config, data: &Data) -> usize {
     }
 }
 
+// This uses a single pipelined command of multiple "RANDOMKEY" commands to get the requested number
+// of random keys. Note that duplicate keys might be returned by this function.
 fn get_random_keys(n_keys: usize, conn: &mut Connection) -> RedisResult<Vec<String>> {
     if n_keys == 0 {
         Ok(Vec::new())
     } else {
-        // Build a pipelined command of multiple RANDOMKEY commands
         let mut pipe = redis::pipe();
         let mut pipe_ref = pipe.borrow_mut();
         for _ in 0..n_keys {
