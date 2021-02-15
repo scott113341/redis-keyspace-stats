@@ -5,6 +5,8 @@ use std::str::FromStr;
 use crate::data::{Data, Keys};
 use crate::parse_args::Config;
 
+pub static OUTPUT_MODE_OPTIONS: [&str; 1] = ["table"];
+
 #[derive(Eq, PartialEq, Debug)]
 pub enum OutputMode {
     StdoutTable,
@@ -34,7 +36,7 @@ pub fn output(config: &Config, data: &Data) {
 mod memory {
     use super::*;
 
-    pub fn total(data: &Data, keys: &Keys) -> isize {
+    pub fn total(data: &Data, keys: &Keys) -> i64 {
         memory_values(data, keys).iter().sum()
     }
 
@@ -53,9 +55,9 @@ mod memory {
         }
     }
 
-    fn memory_values(data: &Data, keys: &Keys) -> Vec<isize> {
+    fn memory_values(data: &Data, keys: &Keys) -> Vec<i64> {
         keys.iter()
-            .map(|k| data.get_sample(k).unwrap().memory.unwrap())
+            .map(|k| data.get_sample(k).unwrap().memory())
             .collect()
     }
 }
@@ -90,9 +92,9 @@ mod ttl {
         }
     }
 
-    fn ttl_values(data: &Data, keys: &Keys) -> Vec<isize> {
+    fn ttl_values(data: &Data, keys: &Keys) -> Vec<i64> {
         keys.iter()
-            .map(|k| data.get_sample(k).unwrap().ttl.unwrap())
+            .map(|k| data.get_sample(k).unwrap().ttl())
             .collect()
     }
 }
@@ -122,4 +124,17 @@ fn percentile_of_sorted(sorted_samples: &Vec<f64>, pct: f64) -> f64 {
     let lo = sorted_samples[n];
     let hi = sorted_samples[n + 1];
     lo + (hi - lo) * d
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn output_mode_options() {
+        for opt in &OUTPUT_MODE_OPTIONS {
+            opt.parse::<OutputMode>()
+                .unwrap_or_else(|_| panic!("Unsupported: {}", opt));
+        }
+    }
 }

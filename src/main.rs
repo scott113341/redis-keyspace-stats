@@ -2,9 +2,9 @@ mod data;
 mod output;
 mod parse_args;
 mod sample;
+mod stats;
 
 use clap::Clap;
-use redis::{Client, Connection};
 
 fn main() {
     // Parse CLI args into a Config struct
@@ -12,8 +12,7 @@ fn main() {
     config.normalize();
 
     // Connect to Redis
-    let client = Client::open(config.url.clone()).unwrap();
-    let mut conn = client.get_connection().unwrap();
+    let mut conn = redis_connection(config.url.clone()).unwrap();
 
     // (Optionally) seed fake data
     // seed_fake_data(128, &mut conn).unwrap();
@@ -25,8 +24,13 @@ fn main() {
     output::output(&config, &data);
 }
 
+fn redis_connection(url: String) -> redis::RedisResult<redis::Connection> {
+    let client = redis::Client::open(url)?;
+    client.get_connection()
+}
+
 #[allow(dead_code)]
-fn seed_fake_data(count: usize, conn: &mut Connection) -> Result<(), redis::RedisError> {
+fn seed_fake_data(count: usize, conn: &mut redis::Connection) -> Result<(), redis::RedisError> {
     use rand::random;
 
     let fake_resources = vec!["user", "company"];
@@ -52,4 +56,25 @@ fn seed_fake_data(count: usize, conn: &mut Connection) -> Result<(), redis::Redi
 
     pipe_ref.query(conn)?;
     Ok(())
+}
+
+#[cfg(test)]
+mod tests {
+    // This doesn't test anything, it's just a helper function that returns a basic config and
+    // Redis connection for use in other tests.
+    pub fn test_config_and_conn() -> (crate::parse_args::Config, redis::Connection) {
+        let config = crate::parse_args::Config {
+            n_samples: 1,
+            batch_size: 1,
+            batch_sleep_ms: 0,
+            stats: crate::stats::Stats::all(),
+            output_mode: crate::output::OutputMode::StdoutTable,
+            url: "redis://127.0.0.1".to_string(),
+            patterns: vec![],
+        };
+
+        let conn = crate::redis_connection(config.url.clone()).unwrap();
+
+        (config, conn)
+    }
 }

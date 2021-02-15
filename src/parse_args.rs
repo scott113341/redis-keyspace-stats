@@ -2,12 +2,9 @@ use clap::crate_version;
 use clap::Clap;
 use glob;
 use std::collections::HashSet;
-use std::str::FromStr;
 
-use crate::output::OutputMode;
-
-static STATS_OPTIONS: [&str; 2] = ["memory", "ttl"];
-static OUTPUT_MODE_OPTIONS: [&str; 1] = ["table"];
+use crate::output::{OutputMode, OUTPUT_MODE_OPTIONS};
+use crate::stats::{Stats, STATS_OPTIONS};
 
 #[derive(Clap, Eq, PartialEq, Debug)]
 #[clap(version = crate_version!())]
@@ -39,36 +36,17 @@ impl Config {
     // that doesn't nicely fit into what Clap gives us.
     pub fn normalize(&mut self) {
         // Deduplicate "stats"
-        let mut uniques = HashSet::new();
-        self.stats.retain(|s| uniques.insert(s.clone()));
+        let mut unique_stats = HashSet::new();
+        self.stats.retain(|s| unique_stats.insert(s.clone()));
 
         // Append a "*" pattern, then deduplicate
         self.patterns.push(glob::Pattern::new("*").unwrap());
-        let mut uniques = HashSet::new();
-        self.stats.retain(|s| uniques.insert(s.clone()));
+        let mut unique_patterns = HashSet::new();
+        self.patterns.retain(|s| unique_patterns.insert(s.clone()));
     }
 
-    pub fn has_stat(&self, stat: Stats) -> bool {
-        self.stats.iter().any(|s| *s == stat)
-    }
-}
-
-#[derive(Eq, PartialEq, Hash, Clone, Debug)]
-pub enum Stats {
-    Memory,
-    TTL,
-}
-
-impl FromStr for Stats {
-    type Err = String;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        use Stats::*;
-        match s {
-            "memory" => Ok(Memory),
-            "ttl" => Ok(TTL),
-            _ => Err(format!("Unknown value: {}", s)),
-        }
+    pub fn has_stat(&self, stat: &Stats) -> bool {
+        self.stats.iter().any(|s| s == stat)
     }
 }
 
@@ -86,22 +64,6 @@ fn validate_url(url: &str) -> Result<(), String> {
 #[cfg(test)]
 mod tests {
     use super::*;
-
-    #[test]
-    fn config_stats_options() {
-        for opt in &STATS_OPTIONS {
-            opt.parse::<Stats>()
-                .unwrap_or_else(|_| panic!("Unsupported: {}", opt));
-        }
-    }
-
-    #[test]
-    fn config_output_mode_options() {
-        for opt in &OUTPUT_MODE_OPTIONS {
-            opt.parse::<OutputMode>()
-                .unwrap_or_else(|_| panic!("Unsupported: {}", opt));
-        }
-    }
 
     #[test]
     fn config_validate_url() {
