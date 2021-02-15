@@ -2,18 +2,18 @@ use std::str::FromStr;
 
 use Stats::*;
 
-pub static STATS_OPTIONS: [&str; 3] = ["exists", "memory", "ttl"];
+pub static STATS_OPTIONS: [&str; 2] = ["memory", "ttl"];
 
 #[derive(Eq, PartialEq, Hash, Clone, Debug)]
 pub enum Stats {
-    Exists,
     Memory,
     TTL,
 }
 
 impl Stats {
+    #[allow(dead_code)]
     pub fn all() -> Vec<Stats> {
-        vec![Exists, Memory, TTL]
+        vec![Memory, TTL]
     }
 }
 
@@ -22,7 +22,6 @@ impl FromStr for Stats {
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s {
-            "exists" => Ok(Exists),
             "memory" => Ok(Memory),
             "ttl" => Ok(TTL),
             _ => Err(format!("Unknown value: {}", s)),

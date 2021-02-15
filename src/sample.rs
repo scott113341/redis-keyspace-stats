@@ -16,27 +16,28 @@ impl Sample {
     pub fn new(data: &Vec<Value>, config: &Config) -> Sample {
         use crate::sample::SampleValue::*;
 
-        let mut num_found_stats = 0;
-
         let mut sample = Sample {
             exists: Unsampled,
             memory: Unsampled,
             ttl: Unsampled,
         };
 
-        if config.has_stat(&Stats::Exists) {
-            let exists = data.get(num_found_stats);
-            num_found_stats += 1;
-            sample.exists = match exists {
-                Some(&Value::Int(0)) => Sampled(false),
-                Some(&Value::Int(1)) => Sampled(true),
-                _ => NotFound,
-            };
-        }
+        // Whether this key exists is always at the 0th index
+        let exists = data.get(0);
+        sample.exists = match exists {
+            Some(&Value::Int(0)) => Sampled(false),
+            Some(&Value::Int(1)) => Sampled(true),
+            _ => NotFound,
+        };
+
+        // The rest of the stats are optional. To account for this, we use an offset for indexing
+        // into the "data" vector. For each stat we read, it is incremented. Note that the order of
+        // stats checked here MUST match the order they were collected in the sample_key function.
+        let mut data_idx = 1;
 
         if config.has_stat(&Stats::Memory) {
-            let memory = data.get(num_found_stats);
-            num_found_stats += 1;
+            let memory = data.get(data_idx);
+            data_idx += 1;
             sample.memory = match memory {
                 Some(Value::Int(mem)) => Sampled(*mem),
                 _ => NotFound,
@@ -45,8 +46,8 @@ impl Sample {
 
         #[allow(unused_assignments)]
         if config.has_stat(&Stats::TTL) {
-            let ttl = data.get(num_found_stats);
-            num_found_stats += 1;
+            let ttl = data.get(data_idx);
+            data_idx += 1;
             sample.ttl = match ttl {
                 Some(Value::Int(ttl)) => Sampled(*ttl),
                 _ => NotFound,
@@ -97,7 +98,7 @@ pub fn sample_key(key: &String, config: &Config, conn: &mut Connection) -> Resul
 
     // Add commands to the pipeline for this key, depending on what stats we've requested
     {
-        // Check whether this key exists (in case it's since expired)
+        // Always check whether this key exists (in case it's since expired)
         // https://redis.io/commands/exists
         pipe_ref = pipe_ref.cmd("EXISTS").arg(key.clone());
 

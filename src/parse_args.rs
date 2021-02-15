@@ -36,13 +36,13 @@ impl Config {
     // that doesn't nicely fit into what Clap gives us.
     pub fn normalize(&mut self) {
         // Deduplicate "stats"
-        let mut uniques = HashSet::new();
-        self.stats.retain(|s| uniques.insert(s.clone()));
+        let mut unique_stats = HashSet::new();
+        self.stats.retain(|s| unique_stats.insert(s.clone()));
 
         // Append a "*" pattern, then deduplicate
         self.patterns.push(glob::Pattern::new("*").unwrap());
-        let mut uniques = HashSet::new();
-        self.stats.retain(|s| uniques.insert(s.clone()));
+        let mut unique_patterns = HashSet::new();
+        self.patterns.retain(|s| unique_patterns.insert(s.clone()));
     }
 
     pub fn has_stat(&self, stat: &Stats) -> bool {
