@@ -4,10 +4,8 @@ use glob;
 use std::collections::HashSet;
 use std::str::FromStr;
 
-use crate::output::OutputMode;
-
 static STATS_OPTIONS: [&str; 2] = ["memory", "ttl"];
-static OUTPUT_MODE_OPTIONS: [&str; 1] = ["table"];
+use crate::output::{OutputMode, OUTPUT_MODE_OPTIONS};
 
 #[derive(Clap, Eq, PartialEq, Debug)]
 #[clap(version = crate_version!())]
@@ -91,14 +89,6 @@ mod tests {
     fn config_stats_options() {
         for opt in &STATS_OPTIONS {
             opt.parse::<Stats>()
-                .unwrap_or_else(|_| panic!("Unsupported: {}", opt));
-        }
-    }
-
-    #[test]
-    fn config_output_mode_options() {
-        for opt in &OUTPUT_MODE_OPTIONS {
-            opt.parse::<OutputMode>()
                 .unwrap_or_else(|_| panic!("Unsupported: {}", opt));
         }
     }
