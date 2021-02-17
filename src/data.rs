@@ -38,7 +38,7 @@ impl Data {
         }
     }
 
-    pub fn count(&self) -> usize {
+    pub fn sample_count(&self) -> usize {
         self.samples.len()
     }
 

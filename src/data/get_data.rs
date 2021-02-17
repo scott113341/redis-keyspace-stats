@@ -65,7 +65,7 @@ pub fn get_data(config: &Config, mut conn: &mut Connection) -> Data {
 
         // Continue sampling until we've surpassed `n_samples`, sleeping after each batch so we
         // don't hammer Redis too hard.
-        if data.count() < config.n_samples {
+        if data.sample_count() < config.n_samples {
             sleep(Duration::from_millis(config.batch_sleep_ms.into()));
         } else {
             break;
@@ -81,8 +81,8 @@ fn this_batch_size(config: &Config, data: &Data) -> usize {
     let n_samples = config.n_samples;
     let default_batch_size = config.batch_size;
 
-    if data.count() + default_batch_size > n_samples {
-        n_samples - data.count()
+    if data.sample_count() + default_batch_size > n_samples {
+        n_samples - data.sample_count()
     } else {
         default_batch_size
     }
