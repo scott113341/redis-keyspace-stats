@@ -17,6 +17,7 @@ humantime = "2.0.1"
 pretty-bytes = "0.2.2"
 prettytable-rs = "0.8.0"
 rand = "0.7.3"
+regex = "1.5.4"
 
 [dependencies.redis]
 version = "0.17.0"

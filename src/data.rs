@@ -5,6 +5,7 @@ use glob;
 use crate::config::Config;
 use crate::sampling::sample::Sample;
 
+pub mod keys;
 pub mod math;
 pub mod memory;
 pub mod other;
