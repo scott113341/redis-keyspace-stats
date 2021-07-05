@@ -36,8 +36,8 @@ mod tests {
 
     #[test]
     fn type_pcts_works() {
-        use crate::sample::Sample;
-        use crate::sample::SampleValue::*;
+        use crate::sampling::sample::Sample;
+        use crate::sampling::sample::SampleValue::*;
 
         let mut samples = HashMap::new();
         let mut keys = Vec::new();

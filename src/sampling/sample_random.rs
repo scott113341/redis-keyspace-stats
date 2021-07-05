@@ -5,7 +5,7 @@ use std::time::Duration;
 
 use crate::config::Config;
 use crate::data::*;
-use crate::sample::sample_key;
+use crate::sampling::sample::sample_key;
 
 // This could be more efficient by pipelining more commands. Right now, the order of operations
 // looks like this:
@@ -25,7 +25,7 @@ use crate::sample::sample_key;
 // Unrelated note: if we don't find found any new keys for 10 batches in a row, this function will
 // exit before n_samples has been collected. This guards against sampling indefinitely if Redis has
 // fewer than n_samples keys total.
-pub fn get_data(config: &Config, mut conn: &mut Connection) -> Data {
+pub fn sample_random(config: &Config, mut conn: &mut Connection) -> Data {
     let mut data = Data::new(&config);
     let mut no_new_keys_streak = 0;
 
@@ -57,7 +57,7 @@ pub fn get_data(config: &Config, mut conn: &mut Connection) -> Data {
         if no_new_keys_streak == 10 {
             eprintln!(
                 "Could only reasonably sample {} keys (of {} requested)",
-                data.samples.len(),
+                data.sample_count(),
                 config.n_samples,
             );
             break;

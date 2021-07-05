@@ -15,7 +15,7 @@ pub struct Sample {
 #[allow(dead_code)]
 impl Sample {
     pub fn new(data: &Vec<Value>, config: &Config) -> Sample {
-        use crate::sample::SampleValue::*;
+        use crate::sampling::sample::SampleValue::*;
 
         let mut sample = Sample {
             exists: Unsampled,
@@ -105,7 +105,7 @@ impl<T> SampleValue<T> {
 }
 
 pub fn sample_key(key: &String, config: &Config, conn: &mut Connection) -> Result<Sample, String> {
-    use crate::sample::SampleValue::*;
+    use crate::sampling::sample::SampleValue::*;
 
     // Instantiate an atomic pipeline that we'll use to gets stats about this key
     let mut pipe = redis::pipe();
