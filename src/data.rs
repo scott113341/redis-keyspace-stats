@@ -3,9 +3,8 @@ use std::collections::HashMap;
 use glob;
 
 use crate::config::Config;
-use crate::sample::Sample;
+use crate::sampling::sample::Sample;
 
-pub mod get_data;
 pub mod math;
 pub mod memory;
 pub mod other;

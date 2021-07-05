@@ -4,12 +4,21 @@ use glob;
 use std::collections::HashSet;
 
 use crate::output::{OutputMode, OUTPUT_MODE_OPTIONS};
+use crate::sampling::{SampleMode, SAMPLE_MODE_OPTIONS};
 use crate::stats::{Stats, STATS_OPTIONS};
 
 #[derive(Clap, Eq, PartialEq, Debug)]
 #[clap(version = crate_version!())]
 pub struct Config {
-    #[clap(short = 'n', long = "samples", default_value = "100")]
+    #[clap(long = "sample", default_value = "random", possible_values = &SAMPLE_MODE_OPTIONS)]
+    pub sample_mode: SampleMode,
+
+    #[clap(
+        short = 'n',
+        long = "samples",
+        default_value = "100",
+        about = "Ignored when --sample=all is specified"
+    )]
     pub n_samples: usize,
 
     #[clap(long = "batch-size", default_value = "100")]
@@ -18,10 +27,20 @@ pub struct Config {
     #[clap(long = "batch-sleep-ms", default_value = "100")]
     pub batch_sleep_ms: u64,
 
-    #[clap(long = "stats", use_delimiter = true, default_value = "memory,ttl", possible_values = &STATS_OPTIONS)]
+    #[clap(
+        long = "stats",
+        use_delimiter = true,
+        default_value = "memory,ttl",
+        possible_values = &STATS_OPTIONS
+    )]
     pub stats: Vec<Stats>,
 
-    #[clap(short = 'o', long = "out", default_value = "table", possible_values = &OUTPUT_MODE_OPTIONS)]
+    #[clap(
+        short = 'o',
+        long = "out",
+        default_value = "table",
+        possible_values = &OUTPUT_MODE_OPTIONS
+    )]
     pub output_mode: OutputMode,
 
     #[clap(long = "url", default_value = "redis://127.0.0.1", validator = validate_url)]
@@ -70,6 +89,7 @@ mod tests {
         assert_eq!(
             Config::parse_from(&["test"]),
             Config {
+                sample_mode: SampleMode::Random,
                 n_samples: 100,
                 batch_size: 100,
                 batch_sleep_ms: 100,

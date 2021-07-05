@@ -8,7 +8,7 @@ This tool is under development, and some obviously useful features are not yet i
 Sampling modes:
 - ✅&nbsp;&nbsp;[Random](https://redis.io/commands/randomkey) sampling
 - 🚧&nbsp;&nbsp;[Random](https://redis.io/commands/randomkey) sampling of keys matching a pattern
-- 🚧&nbsp;&nbsp;[Scan](https://redis.io/commands/scan) all keys
+- ✅&nbsp;&nbsp;[Scan](https://redis.io/commands/scan) all keys
 - 🚧&nbsp;&nbsp;[Scan](https://redis.io/commands/scan) all keys matching a pattern
 
 Statistics:
@@ -33,6 +33,8 @@ Redis support:
 - Redis is single-threaded, so be careful about running this against busy production systems. This tool sends commands
   to Redis in batches (and sleeps between them) to reduce its impact, but caution should still be exercised. Start with
   a small sample size, like the default `-n 100` before running more comprehensive analysis.
+- Use the `--sample=all` mode with care; the `-n` option is ignored and ALL keys will be enumerated with
+  [`SCAN`](https://redis.io/commands/scan)
 - This tool fetches keys, and includes a handful of them in its output. While it's rare to store sensitive information
   in Redis keys, it's worth noting. Values are never fetched or included in any output.
 - The flags/options/organization/etc of the CLI **will** change as more sampling modes and other features are added
@@ -65,8 +67,9 @@ FLAGS:
 OPTIONS:
         --batch-size <batch-size>            [default: 100]
         --batch-sleep-ms <batch-sleep-ms>    [default: 100]
-    -n, --samples <n-samples>                [default: 100]
+    -n, --samples <n-samples>                Ignored when --sample=all is specified [default: 100]
     -o, --out <output-mode>                  [default: table] [possible values: table]
+        --sample <sample-mode>               [default: random] [possible values: all, random]
         --stats <stats>...
             [default: memory,ttl] [possible values: memory, ttl, type]
 
