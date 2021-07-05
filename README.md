@@ -124,3 +124,17 @@ $ redis-keyspace-stats --url $REDIS_URL -n 50 'user:*#messages' 'user:?#*' 'comp
 ```
 
 Note that the **first** pattern that matches a key will determine the group.
+
+## Development
+
+### Testing locally
+
+- Seed some fake test data via environment variable: `RKS_SEED_FAKE_DATA=true cargo run -- --sample=all 'company:*'`
+- Starting the `redis-cli` binary and running `monitor` can be useful for debugging
+
+### Releasing
+
+1. Bump the `version` in `Cargo.toml`
+2. Update the usage example in the `README.md`
+3. Commit, add a git tag for the [release](https://github.com/scott113341/redis-keyspace-stats/releases), and push
+4. Run `cargo publish`
