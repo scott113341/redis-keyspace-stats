@@ -1,7 +1,7 @@
 use redis::{Connection, Value};
 use std::fmt::Debug;
 
-use crate::parse_args::Config;
+use crate::config::Config;
 use crate::stats::Stats;
 
 #[derive(Eq, PartialEq, Debug)]

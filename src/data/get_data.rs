@@ -3,8 +3,8 @@ use std::borrow::BorrowMut;
 use std::thread::sleep;
 use std::time::Duration;
 
+use crate::config::Config;
 use crate::data::*;
-use crate::parse_args::Config;
 use crate::sample::sample_key;
 
 // This could be more efficient by pipelining more commands. Right now, the order of operations

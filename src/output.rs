@@ -1,7 +1,7 @@
 use std::str::FromStr;
 
+use crate::config::Config;
 use crate::data::Data;
-use crate::parse_args::Config;
 
 mod stdout_table;
 

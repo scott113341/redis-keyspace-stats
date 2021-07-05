@@ -1,6 +1,6 @@
+mod config;
 mod data;
 mod output;
-mod parse_args;
 mod sample;
 mod stats;
 
@@ -8,7 +8,7 @@ use clap::Clap;
 
 fn main() {
     // Parse CLI args into a Config struct
-    let mut config = parse_args::Config::parse();
+    let mut config = config::Config::parse();
     config.normalize();
 
     // Connect to Redis
@@ -62,8 +62,8 @@ fn seed_fake_data(count: usize, conn: &mut redis::Connection) -> Result<(), redi
 mod tests {
     // This doesn't test anything, it's just a helper function that returns a basic config and
     // Redis connection for use in other tests.
-    pub fn test_config_and_conn() -> (crate::parse_args::Config, redis::Connection) {
-        let config = crate::parse_args::Config {
+    pub fn test_config_and_conn() -> (crate::config::Config, redis::Connection) {
+        let config = crate::config::Config {
             n_samples: 1,
             batch_size: 1,
             batch_sleep_ms: 0,

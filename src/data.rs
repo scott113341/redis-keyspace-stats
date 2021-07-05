@@ -2,7 +2,7 @@ use std::collections::HashMap;
 
 use glob;
 
-use crate::parse_args::Config;
+use crate::config::Config;
 use crate::sample::Sample;
 
 pub mod get_data;

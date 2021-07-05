@@ -1,7 +1,7 @@
+use crate::config::Config;
 use crate::data::other::example_keys;
 use crate::data::Data;
 use crate::data::{memory, ttl, types};
-use crate::parse_args::Config;
 use crate::stats::Stats;
 
 pub fn stdout_table(config: &Config, data: &Data) {
