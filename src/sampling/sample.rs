@@ -7,7 +7,7 @@ use crate::stats::Stats;
 #[derive(Eq, PartialEq, Debug)]
 pub struct Sample {
     pub exists: SampleValue<bool>,
-    pub memory: SampleValue<i64>,
+    pub memory: SampleValue<u64>,
     pub ttl: SampleValue<i64>,
     pub type_: SampleValue<String>,
 }
@@ -41,7 +41,7 @@ impl Sample {
             let memory = data.get(data_idx);
             data_idx += 1;
             sample.memory = match memory {
-                Some(Value::Int(mem)) => Sampled(*mem),
+                Some(Value::Int(mem)) => Sampled(*mem as u64),
                 _ => NotFound,
             }
         }
@@ -72,7 +72,7 @@ impl Sample {
         self.exists.value().clone()
     }
 
-    pub fn memory(&self) -> i64 {
+    pub fn memory(&self) -> u64 {
         self.memory.value().clone()
     }
 

@@ -57,9 +57,9 @@ pub fn stdout_table(config: &Config, data: &Data) {
             row.add_cell(Cell::new(&convert(memory::total(data, bin) as f64)));
             row.add_cell(Cell::new(
                 &vec![
-                    convert(memory::percentile(data, bin, 50_f64) as f64),
-                    convert(memory::percentile(data, bin, 90_f64) as f64),
-                    convert(memory::percentile(data, bin, 99_f64) as f64),
+                    convert(memory::percentile(data, bin, 50_f64)),
+                    convert(memory::percentile(data, bin, 90_f64)),
+                    convert(memory::percentile(data, bin, 99_f64)),
                 ]
                 .join("\n"),
             ));
