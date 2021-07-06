@@ -1,11 +1,12 @@
+use clap::Clap;
+
 mod config;
 mod data;
+mod metadata;
 mod output;
 mod sampling;
 mod seed;
 mod stats;
-
-use clap::Clap;
 
 fn main() {
     // Parse CLI args into a Config struct
@@ -22,11 +23,18 @@ fn main() {
         }
     }
 
-    // Get sample data from Redis
+    // Get metadata and sample data from Redis
+    let metadata = metadata::get_metadata(&mut conn);
     let data = sampling::collect_samples(&config, &mut conn);
 
     // Display stats
-    output::output(&config, &data);
+    eprintln!(
+        "Sampled {} of {} keys in db{}",
+        data.sample_count(),
+        metadata.total_keys,
+        metadata.redis_db,
+    );
+    output::output(&config, &metadata, &data);
 }
 
 fn redis_connection(url: String) -> redis::RedisResult<redis::Connection> {

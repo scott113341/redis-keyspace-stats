@@ -1,8 +1,15 @@
-use crate::data::math::percentile_of_sorted;
+use crate::data::math::{pct_keyspace_sampled, percentile_of_sorted};
 use crate::data::{Data, Keys};
+use crate::metadata::Metadata;
 
 pub fn total(data: &Data, keys: &Keys) -> u64 {
     memory_values(data, keys).iter().sum()
+}
+
+pub fn total_estimate(metadata: &Metadata, data: &Data, keys: &Keys) -> u64 {
+    let pct_of_keyspace_sampled = pct_keyspace_sampled(metadata, data);
+    let sampled_total = total(data, keys);
+    (sampled_total as f64 / pct_of_keyspace_sampled).round() as u64
 }
 
 pub fn percentile(data: &Data, keys: &Keys, pct: f64) -> f64 {
