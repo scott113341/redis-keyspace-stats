@@ -139,6 +139,6 @@ Note that the **first** pattern that matches a key will determine the group.
 ### Releasing
 
 1. Bump the `version` in `Cargo.toml`
-2. Run run `cargo run -- --help`, and update the help documentation in the `README.md`
+2. Run `cargo run -- --help`, and update the help documentation in the `README.md`
 3. Commit, add a git tag for the [release](https://github.com/scott113341/redis-keyspace-stats/releases), and push
 4. Run `cargo publish`
