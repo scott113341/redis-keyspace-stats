@@ -24,8 +24,8 @@ Output formats:
 
 Redis support:
 - ✅&nbsp;&nbsp;Over [TLS](https://redis.io/topics/encryption) (`rediss://` connection strings)
+- ✅&nbsp;&nbsp;[Logical databases](https://redis.io/commands/select), specified in the connection string (`redis://host:port/db`)
 - 🚧&nbsp;&nbsp;[Clusters](https://redis.io/topics/cluster-tutorial)
-- 🚧&nbsp;&nbsp;[Logical databases](https://redis.io/commands/select)
 
 ## ⚠️ Warnings
 
