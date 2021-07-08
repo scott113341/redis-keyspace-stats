@@ -1,3 +1,8 @@
+use humantime::format_duration;
+use pretty_bytes::converter::convert;
+use prettytable::{Cell, Row, Table};
+use std::time::Duration;
+
 use crate::config::Config;
 use crate::data::keys;
 use crate::data::other::example_keys;
@@ -7,11 +12,6 @@ use crate::metadata::Metadata;
 use crate::stats::Stats;
 
 pub fn stdout_table(config: &Config, metadata: &Metadata, data: &Data) {
-    use humantime::format_duration;
-    use pretty_bytes::converter::convert;
-    use prettytable::{Cell, Row, Table};
-    use std::time::Duration;
-
     /***************/
     /* ADD HEADERS */
     /***************/

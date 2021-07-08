@@ -37,3 +37,24 @@ fn get_total_keys(conn: &mut Connection) -> Result<u64, String> {
         .and_then(|caps| caps["keys"].parse().ok())
         .ok_or(format!("Key count failed for {}", db))
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::tests::test_config_and_conn;
+    use redis::Commands;
+
+    #[test]
+    fn get_total_keys_works() {
+        let (_config, mut conn) = test_config_and_conn();
+        for i in 1..=10 {
+            let _: bool = conn
+                .set_ex(format!("test_key_{}", i), "test_value", 1)
+                .unwrap();
+        }
+
+        let keys = get_total_keys(&mut conn);
+        assert!(keys.is_ok());
+        assert!(keys.unwrap() >= 10);
+    }
+}
