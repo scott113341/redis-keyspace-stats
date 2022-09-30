@@ -11,17 +11,14 @@ keywords = ["redis"]
 categories = ["command-line-utilities", "database", "development-tools::profiling"]
 
 [dependencies]
-glob = "0.3.0"
-humantime = "2.0.1"
-pretty-bytes = "0.2.2"
-prettytable-rs = "0.8.0"
-rand = "0.8.4"
-regex = "1.5.4"
+glob = "*"
+humantime = "*"
+pretty-bytes = "*"
+prettytable-rs = "*"
+rand = "*"
+redis = "*"
+regex = "*"
 
 [dependencies.clap]
 version = "*"
 features = ["derive"]
-
-[dependencies.redis]
-version = "0.17.0"
-features = ["tokio-comp", "tls", "tokio-tls-comp", "async-std-tls-comp"]
