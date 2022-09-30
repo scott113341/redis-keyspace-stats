@@ -14,7 +14,7 @@ pub struct Sample {
 
 #[allow(dead_code)]
 impl Sample {
-    pub fn new(data: &Vec<Value>, config: &Config) -> Sample {
+    pub fn new(data: &[Value], config: &Config) -> Sample {
         use crate::sampling::sample::SampleValue::*;
 
         let mut sample = Sample {
@@ -46,7 +46,7 @@ impl Sample {
             }
         }
 
-        if config.has_stat(&Stats::TTL) {
+        if config.has_stat(&Stats::Ttl) {
             let ttl = data.get(data_idx);
             data_idx += 1;
             sample.ttl = match ttl {
@@ -69,15 +69,15 @@ impl Sample {
     }
 
     pub fn exists(&self) -> bool {
-        self.exists.value().clone()
+        *self.exists.value()
     }
 
     pub fn memory(&self) -> u64 {
-        self.memory.value().clone()
+        *self.memory.value()
     }
 
     pub fn ttl(&self) -> i64 {
-        self.ttl.value().clone()
+        *self.ttl.value()
     }
 
     pub fn type_(&self) -> String {
@@ -130,7 +130,7 @@ pub fn sample_key(key: &String, config: &Config, conn: &mut Connection) -> Resul
 
         // Get the TTL of the key in seconds
         // https://redis.io/commands/ttl
-        if config.has_stat(&Stats::TTL) {
+        if config.has_stat(&Stats::Ttl) {
             pipe_ref = pipe_ref.cmd("TTL").arg(key);
         }
 
@@ -144,8 +144,8 @@ pub fn sample_key(key: &String, config: &Config, conn: &mut Connection) -> Resul
     // Run the pipeline and build the Sample
     let data: Vec<Value> = pipe_ref
         .query(conn)
-        .or_else(|e| Err(format!("Redis pipeline failed: {}", e)))?;
-    let sample = Sample::new(&data, &config);
+        .map_err(|e| format!("Redis pipeline failed: {}", e))?;
+    let sample = Sample::new(&data, config);
 
     // If EXISTS failed or returned 0, return an error. This can happen when a key gets deleted from
     // Redis between the time we got it from RANDOMKEY and now.

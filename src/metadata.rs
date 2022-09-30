@@ -25,7 +25,7 @@ fn get_total_keys(conn: &mut Connection) -> Result<u64, String> {
     let res: redis::InfoDict = redis::cmd("INFO")
         .arg("keyspace")
         .query(conn)
-        .or_else(|e| Err(e.to_string()))?;
+        .map_err(|e| e.to_string())?;
 
     // This will be a String like: "keys=321,expires=123,avg_ttl=456"
     let db_info: String = res.get(&db_key).ok_or(format!("{} not found", db_key))?;

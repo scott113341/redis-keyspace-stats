@@ -1,7 +1,5 @@
 use std::collections::HashMap;
 
-use glob;
-
 use crate::config::Config;
 use crate::sampling::sample::Sample;
 

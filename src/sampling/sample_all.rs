@@ -6,8 +6,8 @@ use crate::config::Config;
 use crate::data::*;
 use crate::sampling::sample::sample_key;
 
-pub fn sample_all(config: &Config, mut conn: &mut Connection) -> Data {
-    let mut data = Data::new(&config);
+pub fn sample_all(config: &Config, conn: &mut Connection) -> Data {
+    let mut data = Data::new(config);
 
     let scan_keys: Vec<String> = redis::cmd("SCAN")
         .cursor_arg(0)
@@ -23,14 +23,14 @@ pub fn sample_all(config: &Config, mut conn: &mut Connection) -> Data {
 
     for key in scan_keys {
         if !data.has_sample(&key) {
-            let sample = sample_key(&key, config, &mut conn);
+            let sample = sample_key(&key, config, conn);
             if let Ok(sample) = sample {
                 data.add_sample(key, sample);
             }
 
             batch_count += 1;
             if batch_count == config.n_samples {
-                sleep(Duration::from_millis(config.batch_sleep_ms.into()));
+                sleep(Duration::from_millis(config.batch_sleep_ms));
                 batch_count = 0;
             }
         }

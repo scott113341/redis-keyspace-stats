@@ -1,5 +1,4 @@
 use clap::Parser;
-use glob;
 use std::collections::HashSet;
 
 use crate::output::OutputMode;
@@ -73,11 +72,11 @@ impl Config {
 // Connects to the given Redis instance and executes a PING command. Returns whatever error message
 // if any part fails, or given URL verbatim if the PING succeeds.
 fn parse_url(url: &str) -> Result<String, String> {
-    let client = redis::Client::open(url).or_else(|e| Err(e.to_string()))?;
-    let mut conn = client.get_connection().or_else(|e| Err(e.to_string()))?;
+    let client = redis::Client::open(url).map_err(|e| e.to_string())?;
+    let mut conn = client.get_connection().map_err(|e| e.to_string())?;
     redis::cmd("PING")
         .query(&mut conn)
-        .or_else(|e| Err(e.to_string()))?;
+        .map_err(|e| e.to_string())?;
 
     Ok(url.to_string())
 }
@@ -96,7 +95,7 @@ mod tests {
                 n_samples: 100,
                 batch_size: 100,
                 batch_sleep_ms: 100,
-                stats: vec![Stats::Memory, Stats::TTL],
+                stats: vec![Stats::Memory, Stats::Ttl],
                 output_mode: OutputMode::Table,
                 url: "redis://127.0.0.1".to_string(),
                 patterns: vec![],

@@ -4,7 +4,7 @@ use crate::data::{Data, Keys};
 pub fn pct_with_ttl(data: &Data, keys: &Keys) -> f64 {
     let values = ttl_values(data, keys);
 
-    if values.len() == 0 {
+    if values.is_empty() {
         0.0
     } else {
         let with_ttl_count = values.iter().filter(|&&v| v >= 0).count();

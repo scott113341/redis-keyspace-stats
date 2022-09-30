@@ -25,14 +25,14 @@ use crate::sampling::sample::sample_key;
 // Unrelated note: if we don't find found any new keys for 10 batches in a row, this function will
 // exit before n_samples has been collected. This guards against sampling indefinitely if Redis has
 // fewer than n_samples keys total.
-pub fn sample_random(config: &Config, mut conn: &mut Connection) -> Data {
-    let mut data = Data::new(&config);
+pub fn sample_random(config: &Config, conn: &mut Connection) -> Data {
+    let mut data = Data::new(config);
     let mut no_new_keys_streak = 0;
 
     loop {
         // Get a batch of random keys
         let batch_size = this_batch_size(config, &data);
-        let keys = get_random_keys(batch_size, &mut conn).unwrap();
+        let keys = get_random_keys(batch_size, conn).unwrap();
 
         // Initialized as true, but set to false if any new keys are sampled this batch
         let mut no_new_keys = true;
@@ -41,7 +41,7 @@ pub fn sample_random(config: &Config, mut conn: &mut Connection) -> Data {
         // been sampled.
         for key in keys {
             if !data.has_sample(&key) {
-                let sample = sample_key(&key, config, &mut conn);
+                let sample = sample_key(&key, config, conn);
                 if let Ok(sample) = sample {
                     data.add_sample(key, sample);
                     no_new_keys = false;
@@ -66,7 +66,7 @@ pub fn sample_random(config: &Config, mut conn: &mut Connection) -> Data {
         // Continue sampling until we've surpassed `n_samples`, sleeping after each batch so we
         // don't hammer Redis too hard.
         if data.sample_count() < config.n_samples {
-            sleep(Duration::from_millis(config.batch_sleep_ms.into()));
+            sleep(Duration::from_millis(config.batch_sleep_ms));
         } else {
             break;
         }

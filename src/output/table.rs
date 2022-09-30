@@ -30,7 +30,7 @@ pub fn table(config: &Config, metadata: &Metadata, data: &Data) {
         row.add_cell(Cell::new("Memory"));
     }
 
-    if config.has_stat(&Stats::TTL) {
+    if config.has_stat(&Stats::Ttl) {
         let row = table.get_mut_row(0).unwrap();
         row.add_cell(Cell::new("TTL"));
     }
@@ -56,7 +56,7 @@ pub fn table(config: &Config, metadata: &Metadata, data: &Data) {
                 ]
                 .join("\n"),
             ),
-            Cell::new(&example_keys(&bin).join("\n")),
+            Cell::new(&example_keys(bin).join("\n")),
         ]);
 
         if config.has_stat(&Stats::Memory) {
@@ -75,7 +75,7 @@ pub fn table(config: &Config, metadata: &Metadata, data: &Data) {
             ));
         }
 
-        if config.has_stat(&Stats::TTL) {
+        if config.has_stat(&Stats::Ttl) {
             row.add_cell(Cell::new(
                 &vec![
                     format!("{:.2}% have TTL", ttl::pct_with_ttl(data, bin)),
@@ -84,21 +84,18 @@ pub fn table(config: &Config, metadata: &Metadata, data: &Data) {
                         format_duration(Duration::from_secs_f64(ttl::percentile(
                             data, bin, 50_f64
                         )))
-                        .to_string()
                     ),
                     format!(
                         "{} (p90)",
                         format_duration(Duration::from_secs_f64(ttl::percentile(
                             data, bin, 90_f64
                         )))
-                        .to_string()
                     ),
                     format!(
                         "{} (p99)",
                         format_duration(Duration::from_secs_f64(ttl::percentile(
                             data, bin, 99_f64
                         )))
-                        .to_string()
                     ),
                 ]
                 .join("\n"),
