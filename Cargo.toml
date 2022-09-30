@@ -1,6 +1,6 @@
 [package]
 name = "redis-keyspace-stats"
-version = "0.5.1"
+version = "0.5.2"
 authors = ["Scott Hardy <scott.the.hardy@gmail.com>"]
 edition = "2021"
 license = "MIT"
@@ -11,14 +11,14 @@ keywords = ["redis"]
 categories = ["command-line-utilities", "database", "development-tools::profiling"]
 
 [dependencies]
-glob = "*"
-humantime = "*"
-pretty-bytes = "*"
-prettytable-rs = "*"
-rand = "*"
-redis = "*"
-regex = "*"
+glob = "0.3.*"
+humantime = "2.*"
+pretty-bytes = "0.2.*"
+prettytable-rs = "0.9.*"
+rand = "0.8.*"
+redis = "0.21.*"
+regex = "1.*"
 
 [dependencies.clap]
-version = "*"
+version = "4.*"
 features = ["derive"]
