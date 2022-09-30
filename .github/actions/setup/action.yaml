@@ -1,0 +1,12 @@
+name: Setup
+description: Install Rust and dependencies
+runs:
+  using: composite
+  steps:
+    - name: Install Rust
+      shell: bash
+      run: rustup toolchain install stable
+    - name: Install dependencies
+      uses: Swatinem/rust-cache@v2
+      with:
+        shared-key: cache
