@@ -11,7 +11,7 @@ use crate::data::{memory, ttl, types};
 use crate::metadata::Metadata;
 use crate::stats::Stats;
 
-pub fn stdout_table(config: &Config, metadata: &Metadata, data: &Data) {
+pub fn table(config: &Config, metadata: &Metadata, data: &Data) {
     /***************/
     /* ADD HEADERS */
     /***************/

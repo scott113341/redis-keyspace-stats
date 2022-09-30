@@ -1,4 +1,4 @@
-use clap::Clap;
+use clap::Parser;
 
 mod config;
 mod data;
@@ -53,7 +53,7 @@ mod tests {
             batch_size: 1,
             batch_sleep_ms: 0,
             stats: crate::stats::Stats::all(),
-            output_mode: crate::output::OutputMode::StdoutTable,
+            output_mode: crate::output::OutputMode::Table,
             url: "redis://127.0.0.1".to_string(),
             patterns: vec![],
         };
