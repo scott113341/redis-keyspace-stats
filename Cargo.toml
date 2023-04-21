@@ -1,6 +1,6 @@
 [package]
 name = "redis-keyspace-stats"
-version = "0.5.2"
+version = "0.5.3"
 authors = ["Scott Hardy <scott.the.hardy@gmail.com>"]
 edition = "2021"
 license = "MIT"
