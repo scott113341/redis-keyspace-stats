@@ -16,9 +16,12 @@ humantime = "2.*"
 pretty-bytes = "0.2.*"
 prettytable-rs = "0.10.*"
 rand = "0.8.*"
-redis = "0.23.*"
 regex = "1.*"
 
 [dependencies.clap]
 version = "4.*"
 features = ["derive"]
+
+[dependencies.redis]
+version = "0.23.*"
+features = ["tls-rustls"]
