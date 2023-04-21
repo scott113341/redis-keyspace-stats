@@ -1,7 +1,8 @@
-use redis::{Connection, RedisResult};
 use std::borrow::BorrowMut;
 use std::thread::sleep;
 use std::time::Duration;
+
+use redis::{Connection, RedisResult};
 
 use crate::config::Config;
 use crate::data::*;

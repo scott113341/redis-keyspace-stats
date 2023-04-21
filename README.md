@@ -58,24 +58,15 @@ Arguments:
   [PATTERNS]...  Glob-style patterns to group keys together
 
 Options:
-      --sample <SAMPLE_MODE>
-          [default: random] [possible values: all, random]
-  -n, --samples <N_SAMPLES>
-          Ignored when --sample=all is specified [default: 100]
-      --batch-size <BATCH_SIZE>
-          [default: 100]
-      --batch-sleep-ms <BATCH_SLEEP_MS>
-          [default: 100]
-      --stats <STATS>
-          [default: memory,ttl] [possible values: memory, ttl, type]
-  -o, --out <OUTPUT_MODE>
-          [default: table] [possible values: table]
-      --url <URL>
-          [default: redis://127.0.0.1]
-  -h, --help
-          Print help information
-  -V, --version
-          Print version information
+      --sample <SAMPLE_MODE>             [default: random] [possible values: all, random]
+  -n, --samples <N_SAMPLES>              Ignored when --sample=all is specified [default: 100]
+      --batch-size <BATCH_SIZE>          [default: 100]
+      --batch-sleep-ms <BATCH_SLEEP_MS>  [default: 100]
+      --stats <STATS>                    [default: memory,ttl] [possible values: memory, ttl, type]
+  -o, --out <OUTPUT_MODE>                [default: table] [possible values: table]
+      --url <URL>                        [default: redis://127.0.0.1]
+  -h, --help                             Print help
+  -V, --version                          Print version
 ```
 
 Let's get some quick memory + TTL stats, sampling 50 keys:

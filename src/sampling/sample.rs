@@ -1,5 +1,6 @@
-use redis::{Connection, Value};
 use std::fmt::Debug;
+
+use redis::{Connection, Value};
 
 use crate::config::Config;
 use crate::stats::Stats;

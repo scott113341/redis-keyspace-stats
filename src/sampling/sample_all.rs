@@ -1,6 +1,7 @@
-use redis::Connection;
 use std::thread::sleep;
 use std::time::Duration;
+
+use redis::Connection;
 
 use crate::config::Config;
 use crate::data::*;

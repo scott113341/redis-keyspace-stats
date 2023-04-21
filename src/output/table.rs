@@ -1,13 +1,12 @@
+use std::time::Duration;
+
 use humantime::format_duration;
 use pretty_bytes::converter::convert;
 use prettytable::{Cell, Row, Table};
-use std::time::Duration;
 
 use crate::config::Config;
-use crate::data::keys;
 use crate::data::other::example_keys;
-use crate::data::Data;
-use crate::data::{memory, ttl, types};
+use crate::data::{keys, memory, ttl, types, Data};
 use crate::metadata::Metadata;
 use crate::stats::Stats;
 

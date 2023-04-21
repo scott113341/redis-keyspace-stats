@@ -40,9 +40,10 @@ fn get_total_keys(conn: &mut Connection) -> Result<u64, String> {
 
 #[cfg(test)]
 mod tests {
+    use redis::Commands;
+
     use super::*;
     use crate::tests::test_config_and_conn;
-    use redis::Commands;
 
     #[test]
     fn get_total_keys_works() {

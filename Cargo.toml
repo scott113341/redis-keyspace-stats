@@ -14,9 +14,9 @@ categories = ["command-line-utilities", "database", "development-tools::profilin
 glob = "0.3.*"
 humantime = "2.*"
 pretty-bytes = "0.2.*"
-prettytable-rs = "0.9.*"
+prettytable-rs = "0.10.*"
 rand = "0.8.*"
-redis = "0.21.*"
+redis = "0.23.*"
 regex = "1.*"
 
 [dependencies.clap]

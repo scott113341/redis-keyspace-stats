@@ -1,5 +1,6 @@
-use clap::Parser;
 use std::collections::HashSet;
+
+use clap::Parser;
 
 use crate::output::OutputMode;
 use crate::sampling::SampleMode;
@@ -83,8 +84,9 @@ fn parse_url(url: &str) -> Result<String, String> {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use clap::CommandFactory;
+
+    use super::*;
 
     #[test]
     fn config_parse_url() {
