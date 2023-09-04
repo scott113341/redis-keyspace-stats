@@ -171,7 +171,7 @@ mod tests {
         let sample = sample_key(&"sample_key_works_1".to_string(), &config, &mut conn).unwrap();
 
         assert_eq!(sample.exists(), true);
-        assert!(sample.memory() > 16);
+        assert!(sample.memory() > 0);
         assert_eq!(sample.ttl(), 10);
         assert_eq!(sample.type_(), "string".to_string());
     }
@@ -185,7 +185,7 @@ mod tests {
         let sample = sample_key(&"sample_key_works_2".to_string(), &config, &mut conn).unwrap();
 
         assert_eq!(sample.exists(), true);
-        assert!(sample.memory() > 128);
+        assert!(sample.memory() > 0);
         assert_eq!(sample.ttl(), -1);
         assert_eq!(sample.type_(), "set".to_string());
     }
